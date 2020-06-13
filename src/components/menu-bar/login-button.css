@@ -1,0 +1,18 @@
+@import "../../css/colors.css";
+
+.login-button {
+  margin-left: 15px;
+  margin-right: 15px;
+  background: $data-primary;
+  border: none;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  cursor: pointer;
+}
+.content {
+  color: $ui-white;
+  font-size: 13px;
+}

@@ -1,0 +1,19 @@
+@import "../../css/colors.css";
+@import "../../css/units.css";
+.modal-content {
+    width: 580px;
+}
+.full-width {
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  color: #333;
+}
+.box-margin {
+  margin-bottom: 20px;
+}
+.modal-box {
+  background-color: $ui-white;
+  padding: 30px;
+  position: relative;
+}

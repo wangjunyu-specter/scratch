@@ -1,0 +1,18 @@
+.arrow-img {
+  width: 30px;
+}
+.toggle-arrow-btn {
+  width: 30px;
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  margin: 0;
+  margin-top: -15px;
+  padding: 0;
+}
+.btn-left {
+  left: 10px;
+}
+.btn-right {
+  right: 10px;
+}

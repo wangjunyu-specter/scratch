@@ -1,0 +1,28 @@
+.mybutton {
+  position: absolute;
+  bottom: 0.75rem;
+  border-radius: 100%;
+  width: 2.75rem;
+  height: 2.75rem;
+  -webkit-box-shadow: 0 0 0 4px hsla(215, 100%, 65%, 0.35);
+  box-shadow: 0 0 0 4px hsla(215, 100%, 65%, 0.35);
+  z-index: 46;
+  -webkit-transition: -webkit-transform, -webkit-box-shadow 0.5s;
+  transition: -webkit-transform, -webkit-box-shadow 0.5s;
+  -o-transition: transform, box-shadow 0.5s;
+  transition: transform, box-shadow 0.5s;
+  transition: transform, box-shadow 0.5s, -webkit-transform, -webkit-box-shadow 0.5s;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.mybutton-content {
+  background-color: rgb(77, 151, 255);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: #fff;
+}
