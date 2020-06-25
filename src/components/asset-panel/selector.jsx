@@ -80,7 +80,7 @@ const Selector = props => {
                             onClick={onItemClick}
                             onDeleteButtonClick={onDeleteClick}
                             onDuplicateButtonClick={onDuplicateClick}
-                            onExportButtonClick={onExportClick}
+                            // onExportButtonClick={onExportClick} 禁止右键导出
                         />
                     </SortableAsset>
                 ))}

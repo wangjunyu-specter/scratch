@@ -57,7 +57,8 @@ class GUI extends React.Component {
             taskList: [],
             commentData: '',
             filepath: false,
-            ispl: 0 // 1 是评论 2 上课 3 答题 4 看答案
+            ispl: 0, // 1 是评论 2 上课 3 答题 4 看答案
+            loading: false
         };
         bindAll(this, [
             'setLogin',
@@ -77,13 +78,9 @@ class GUI extends React.Component {
         let search;
         if (window.location.search) {
             search = window.location.search;
-        } else if (window.sessionStorage.getItem('search')) {
-            search = window.sessionStorage.getItem('search');
         }
-        console.error(search)
         this.search = {};
         if (search) {
-            window.sessionStorage.setItem('search', search);
             search = decodeURI(search);
             if (search.startsWith('?')) {
                 search = search.replace('?', '');
@@ -95,8 +92,17 @@ class GUI extends React.Component {
                     obj[arr2[0]] = arr2[1];
                 }
                 this.search = obj;
+                window.sessionStorage.setItem('search', JSON.stringify(this.search));
             }
-            window.history.replaceState(null,null,'?');
+            window.history.replaceState(null, null, '?');
+        } else if (window.sessionStorage.getItem('search')) {
+            search = window.sessionStorage.getItem('search');
+            try {
+                search = JSON.parse(search);
+                this.search = search;
+            } catch(err) {
+                console.error(err);
+            }
         }
         this.token = '';
         if (this.search.token) {
@@ -111,19 +117,17 @@ class GUI extends React.Component {
             token = token.toString();
             token = token.replace(/,/g, '');
             this.token = token;
+            window.sessionStorage.setItem('token', this.token);
             // this.$store.dispatch(setLogined())
             this.setLogin();
             if (this.search.ispl) {
                 this.setIspl(+this.search.ispl)
             }
         }
-        console.log(this.search)
-        console.info(this.state.ispl)
         if (this.search.filepath) {
             this.setFilepath();
             this.getFileForPath(this.search.filepath);
         } else if (this.search.ispl && this.search.courseId) {
-            console.error('到这里来了')
             let link = '';
             const obj = {
                 courseId: +this.search.courseId
@@ -153,8 +157,8 @@ class GUI extends React.Component {
             }
             this.getFilePath(link, obj, type);
         }
-        if (this.search.courseId) { // 获取任务列表
-            fetch(`${this.domini}/api/student/getTasks?courseId=${this.search.courseId}`, {
+        if (this.search.fileId) { // 获取任务列表
+            fetch(`${this.domini}/api/student/getTasks?fileId=${this.search.fileId}`, {
                 method: 'GET',
                 headers: new Headers({
                     token: this.token,
@@ -164,6 +168,7 @@ class GUI extends React.Component {
             }).then(response => response.json()).then( res => {
                 console.log(res)
                 if (res.data.total > 0) {
+                    console.log(res.data.rows)
                     this.setTaskList(res.data.rows);
                 }
             }).catch( error => {
@@ -182,6 +187,18 @@ class GUI extends React.Component {
             // At this time the project view in www doesn't need to know when a project is unloaded
             this.props.onProjectLoaded();
         }
+    }
+    /**
+     * @Author: wjy-mac
+     * @description: 设置
+     * @Date: 2020-06-24 00:16:08
+     * @param {type} 
+     * @return: 
+     */    
+    setLoading (bool) {
+        this.setState({
+            loading: bool
+        });
     }
     /**
      * @Author: wjy-mac
@@ -243,6 +260,7 @@ class GUI extends React.Component {
         if (!path || typeof path !== 'string') {
             return;
         }
+        this.setLoading(true);
         const obj = new FormData();
         obj.append('path', path);
         const xhr = new XMLHttpRequest();
@@ -263,6 +281,7 @@ class GUI extends React.Component {
                     action: 'Import Project File',
                     nonInteraction: true
                 });
+                this.setLoading(false);
             });
         };
         xhr.send(obj);
@@ -317,9 +336,10 @@ class GUI extends React.Component {
             ispl: type
         });
     }
-    setTaskList (arr) {
-        console.log(arr)
-        console.log(this.state)
+    setTaskList (arr) { // 设置任务
+        this.setState({
+            taskList: arr
+        });
     }
     render () {
         if (this.props.isError) {
@@ -351,7 +371,7 @@ class GUI extends React.Component {
         } = this.props;
         return (
             <GUIComponent
-                loading={fetchingProject || isLoading || loadingStateVisible}
+                loading={fetchingProject || isLoading || loadingStateVisible || this.state.loading}
                 loginState={this.state.loginState}
                 username2={this.state.username2}
                 courseId={this.state.courseId}
@@ -390,7 +410,8 @@ GUI.propTypes = {
     projectId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     telemetryModalVisible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired,
-    commentFormData: PropTypes.string
+    commentFormData: PropTypes.string,
+    changeComentForm: PropTypes.func
     // loginState: PropTypes.bool
 };
 

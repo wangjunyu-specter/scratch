@@ -25,7 +25,8 @@ import {MenuItem, MenuSection} from '../menu/menu.jsx';
 // import AuthorInfo from './author-info.jsx';
 import AccountNav from '../../containers/account-nav.jsx';
 // import LoginDropdown from './login-dropdown.jsx';
-import SB3Downloader from '../../containers/sb3-downloader.jsx';
+// import SB3Downloader from '../../containers/sb3-downloader.jsx';
+import SB3UpdateToWeb from '../../containers/sb3-updatetoweb.jsx';
 import DeletionRestorer from '../../containers/deletion-restorer.jsx';
 import TurboMode from '../../containers/turbo-mode.jsx';
 import MenuBarHOC from '../../containers/menu-bar-hoc.jsx';
@@ -77,7 +78,7 @@ import aboutIcon from './icon--about.svg';
 import scratchLogo from './scratch-logo.svg';
 
 import sharedMessages from '../../lib/shared-messages';
-
+let setTimefn;
 const ariaMessages = defineMessages({
     language: {
         id: 'gui.menuBar.LanguageSelector',
@@ -427,7 +428,7 @@ class MenuBar extends React.Component {
                                                 </MenuItem>
                                             )}
                                         </SBFileUploader>
-                                        <SB3Downloader>{(className, downloadProjectCallback) => (
+                                        {/* <SB3Downloader>{(className, downloadProjectCallback) => (
                                             <MenuItem
                                                 className={className}
                                                 onClick={this.getSaveToComputerHandler(downloadProjectCallback)}
@@ -438,7 +439,7 @@ class MenuBar extends React.Component {
                                                     id="gui.menuBar.downloadToComputer"
                                                 />
                                             </MenuItem>
-                                        )}</SB3Downloader>
+                                        )}</SB3Downloader> */}
                                     </MenuSection>
                                 </MenuBarMenu>
                             </div>
@@ -524,10 +525,21 @@ class MenuBar extends React.Component {
                     {
                         this.props.ispl === 2 || this.props.ispl === 3 ? (
                             <div>
-                                <LoginButton
-                                    // eslint-disable-next-line react/no-children-prop
-                                    children="保存"
-                                />
+                                <SB3UpdateToWeb>{(className, downloadProjectCallback, timefn) => (
+                                    <MenuItem
+                                        className={className}
+                                        onClick={this.getSaveToComputerHandler(downloadProjectCallback)}
+                                    >
+                                        {
+                                            timefn()
+                                        }
+                                        <FormattedMessage
+                                            defaultMessage="上传作业到服务器"
+                                            description="Menu bar item for downloading a project to your computer" // eslint-disable-line max-len
+                                            id="gui.menuBar.updatetoweb"
+                                        />
+                                    </MenuItem>
+                                )}</SB3UpdateToWeb>
                             </div>
                         ) : null
                     }
