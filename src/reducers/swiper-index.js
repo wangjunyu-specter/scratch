@@ -2,7 +2,7 @@
  * @Author: wjy-mac
  * @Date: 2020-06-10 00:28:08
  * @LastEditors: wjy-mac
- * @LastEditTime: 2020-06-12 00:07:05
+ * @LastEditTime: 2020-06-27 17:31:20
  * @Description: 任务swiper 当前序号
  */
 const TASK_SWIPER_INDEX_ADD = 'scratch-gui/task_swiper_index/add';
@@ -28,11 +28,11 @@ const reducer = function (state = initialState, action) {
     switch (action.type) {
     case TASK_SWIPER_INDEX_ADD:
         return Object.assign({}, state, {
-            [action.modal]: state[action.modal] + 1
+            [action.modal]: state[action.modal] - 1
         });
     case TASK_SWIPER_INDEX_REDUCE:
         return Object.assign({}, state, {
-            [action.modal]: state[action.modal] - 1
+            [action.modal]: state[action.modal] + 1
         });
     default:
         return state;

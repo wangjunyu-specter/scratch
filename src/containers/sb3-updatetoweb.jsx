@@ -32,7 +32,10 @@ class SB3UpdateToWeb extends React.Component {
             if (this.props.onSaveFinished) {
                 this.props.onSaveFinished();
             }
-            updatetowebBlob(this.props.projectFilename, content);
+            this.props.setShowTips();
+            updatetowebBlob(this.props.projectFilename, content).then(() =>{
+                this.props.closeShowTips();
+            }, () => this.props.closeShowTips());
         });
     }
     timefn () {
@@ -71,10 +74,14 @@ SB3UpdateToWeb.propTypes = {
     className: PropTypes.string,
     onSaveFinished: PropTypes.func,
     projectFilename: PropTypes.string,
-    saveProjectSb3: PropTypes.func
+    saveProjectSb3: PropTypes.func,
+    setShowTips: PropTypes.func,
+    closeShowTips: PropTypes.func
 };
 SB3UpdateToWeb.defaultProps = {
-    className: ''
+    className: '',
+    setShowTips: () => {},
+    closeShowTips: () => {}
 };
 
 const mapStateToProps = state => ({

@@ -173,14 +173,37 @@ class MenuBar extends React.Component {
             'handleLanguageMouseUp',
             'handleRestoreOption',
             'getSaveToComputerHandler',
-            'restoreOptionMessage'
+            'restoreOptionMessage',
+            'setShowTips',
+            'xloseShowTips',
+            'refresh'
         ]);
+        this.state = {
+            isshowTips: false
+        };
     }
+    
     componentDidMount () {
         document.addEventListener('keydown', this.handleKeyPress);
     }
     componentWillUnmount () {
         document.removeEventListener('keydown', this.handleKeyPress);
+    }
+    setShowTips () {
+        console.log('之sing了')
+        this.setState({
+            isshowTips: true
+        });
+    }
+    refresh () {
+        history.go(0)
+    }
+    xloseShowTips () {
+        console.log('之sing了222')
+
+        this.setState({
+            isshowTips: false
+        });
     }
     handleClickNew () {
         // if the project is dirty, and user owns the project, we will autosave.
@@ -525,7 +548,22 @@ class MenuBar extends React.Component {
                     {
                         this.props.ispl === 2 || this.props.ispl === 3 ? (
                             <div>
-                                <SB3UpdateToWeb>{(className, downloadProjectCallback, timefn) => (
+                                <MenuItem
+                                    isRtl={this.props.isRtl}
+                                    onClick={this.refresh}
+                                >
+                                    恢复
+                                </MenuItem>
+                            </div>
+                        ) : null
+                    }
+                    {
+                        this.props.ispl === 2 || this.props.ispl === 3 ? (
+                            <div>
+                                <SB3UpdateToWeb
+                                    setShowTips={this.setShowTips}
+                                    closeShowTips={this.xloseShowTips}
+                                >{(className, downloadProjectCallback, timefn) => (
                                     <MenuItem
                                         className={className}
                                         onClick={this.getSaveToComputerHandler(downloadProjectCallback)}
@@ -538,12 +576,18 @@ class MenuBar extends React.Component {
                                             description="Menu bar item for downloading a project to your computer" // eslint-disable-line max-len
                                             id="gui.menuBar.updatetoweb"
                                         />
-                                    </MenuItem>
-                                )}</SB3UpdateToWeb>
+                                        </MenuItem>
+                                    )}</SB3UpdateToWeb>
                             </div>
                         ) : null
                     }
-                    
+                    {
+                        this.state.isshowTips ? (
+                            <div>
+                                正在上传文件...
+                            </div>
+                        ) : null
+                    }
                     {/* <Divider className={classNames(styles.divider)} /> */}
                     {/* {this.props.canEditTitle ? (
                         <div className={classNames(styles.menuBarItem, styles.growable)}>

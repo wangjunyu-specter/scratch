@@ -80,6 +80,7 @@ class GUI extends React.Component {
             search = window.location.search;
         }
         this.search = {};
+        // 开始设置链接所带参数
         if (search) {
             search = decodeURI(search);
             if (search.startsWith('?')) {
@@ -104,8 +105,9 @@ class GUI extends React.Component {
                 console.error(err);
             }
         }
+
         this.token = '';
-        if (this.search.token) {
+        if (this.search.token) { // 当存在token，则获取对应数据
             const num = this.search.token.length - this.search.num;
             let token = this.search.token.substr(0, num);
             token = token.split('');
