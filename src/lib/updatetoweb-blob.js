@@ -2,7 +2,7 @@
  * @Author: wjy-mac
  * @Date: 2020-06-22 22:17:33
  * @LastEditors: wjy-mac
- * @LastEditTime: 2020-06-28 01:22:07
+ * @LastEditTime: 2020-06-28 23:29:39
  * @Description: 保存文件到服务器
  */ 
 
@@ -44,7 +44,8 @@ export default (filename, blob) => {
                 cover: '',
                 answerContent: resFile.fileName,
                 answerTime: Date.now(),
-                studentId: search.userId
+                studentId: search.userId,
+                fileId: search.fileId
             });
             setWork(`[${homeWorks}]`, search).then(() => resolve()).catch(() => reject());
         }).catch(err => {

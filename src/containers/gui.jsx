@@ -105,7 +105,7 @@ class GUI extends React.Component {
                 console.error(err);
             }
         }
-
+        console.log(this.search)
         this.token = '';
         if (this.search.token) { // 当存在token，则获取对应数据
             const num = this.search.token.length - this.search.num;
