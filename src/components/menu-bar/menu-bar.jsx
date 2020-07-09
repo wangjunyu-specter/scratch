@@ -25,7 +25,7 @@ import {MenuItem, MenuSection} from '../menu/menu.jsx';
 // import AuthorInfo from './author-info.jsx';
 import AccountNav from '../../containers/account-nav.jsx';
 // import LoginDropdown from './login-dropdown.jsx';
-// import SB3Downloader from '../../containers/sb3-downloader.jsx';
+import SB3Downloader from '../../containers/sb3-downloader.jsx';
 import SB3UpdateToWeb from '../../containers/sb3-updatetoweb.jsx';
 import DeletionRestorer from '../../containers/deletion-restorer.jsx';
 import TurboMode from '../../containers/turbo-mode.jsx';
@@ -194,12 +194,14 @@ class MenuBar extends React.Component {
         this.setState({
             isshowTips: true
         });
+        this.props.onsetLoading(true);
     }
     refresh () {
         history.go(0)
     }
     xloseShowTips () {
         console.log('之sing了222')
+        this.props.onsetLoading(false);
 
         this.setState({
             isshowTips: false
@@ -568,9 +570,9 @@ class MenuBar extends React.Component {
                                         className={className}
                                         onClick={this.getSaveToComputerHandler(downloadProjectCallback)}
                                     >
-                                        {
+                                        {/* {
                                             timefn()
-                                        }
+                                        } */}
                                         <FormattedMessage
                                             defaultMessage="上传作业到服务器"
                                             description="Menu bar item for downloading a project to your computer" // eslint-disable-line max-len
@@ -774,7 +776,8 @@ MenuBar.propTypes = {
     vm: PropTypes.instanceOf(VM).isRequired,
     loginState: PropTypes.bool,
     onShowTaskModal: PropTypes.func,
-    ispl: PropTypes.number
+    ispl: PropTypes.number,
+    onsetLoading: PropTypes.func
 };
 
 MenuBar.defaultProps = {

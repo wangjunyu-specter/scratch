@@ -16,7 +16,7 @@ const TaskModal = props => {
     return (
         <Modal
             className={styles.modalContent}
-            contentLabel={props.title}
+            contentLabel={`任务${  props.index  + 1 }`}
             id="taskModal"
             onRequestClose={props.onCancel}
         >
@@ -35,17 +35,22 @@ const TaskModal = props => {
                     props.list.map((item, index) =>
                         (<div
                             key={item.taskId}
+                            className={styles.contentCenter}
                             // eslint-disable-next-line no-negated-condition
                             style={{display: index !== props.index ? 'none' : 'block'}}
                         >
-                            <div className={classNames(styles.fullWidth, styles.boxMargin)}>{item.description}</div>
+                            <div className={classNames(styles.fullWidth, styles.boxMargin)}>
+                                <p className={styles.area}>
+                                    {item.description}
+                                </p>
+                            </div>
                             {
                                 item.picture ? (
                                     <img
-                                        className={styles.fullWidth}
+                                        className={classNames(styles.fullWidth, styles.imgMaxh)}
                                         src={`http://47.105.231.23:8080/profile${item.picture}`}
                                     />
-                                ) : (
+                                ) : item.vedio ? (
                                     <video
                                         className={styles.fullWidth}
                                         height="300"
@@ -55,7 +60,7 @@ const TaskModal = props => {
                                     >
                                         您的浏览器不支持 video 标签。
                                     </video>
-                                )
+                                ) : null
                             }
                             
                         </div>)

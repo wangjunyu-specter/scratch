@@ -9,6 +9,10 @@
   font-size: 14px;
   color: #333;
 }
+img.full-width {
+  width: auto;
+  max-width: 100%;
+}
 .box-margin {
   margin-bottom: 20px;
 }
@@ -16,4 +20,19 @@
   background-color: $ui-white;
   padding: 30px;
   position: relative;
+}
+.img-maxh {
+  max-height: 500px;
+}
+.content-center {
+  text-align: center;
+  padding: 0 20px;
+}
+.area {
+  white-space: pre-wrap;
+  text-align: left;
+  margin: 0;
+}
+.no-margin {
+  margin:  0;
 }

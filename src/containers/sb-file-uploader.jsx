@@ -7,6 +7,7 @@ import {setProjectTitle} from '../reducers/project-title';
 
 import log from '../lib/log';
 import sharedMessages from '../lib/shared-messages';
+import analytics from '../lib/analytics.js';
 
 import {
     LoadingStates,
@@ -63,15 +64,43 @@ class SBFileUploader extends React.Component {
         ]);
     }
     componentWillMount () {
+        console.log('componentWillMount')
         this.reader = new FileReader();
         this.reader.onload = this.onload;
         this.resetFileInput();
+    }
+    componentDidMount () {
+        const obj = new FormData();
+        obj.append('path', '/upload/20200703/2fc24cb39ad73c47a850a30dd27a8203.sb3');
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://47.105.231.23:8080/api/common/download', true);
+        // xhr.setRequestHeader('Content-Type', 'multipart/form-data;');
+        xhr.setRequestHeader('token', '22d96780f9b2070e31a8639bde3a84d4');
+        xhr.setRequestHeader('loginName', 'yrh');
+        xhr.setRequestHeader('dqUserId', 35);
+        // responseType要放到send前面
+        xhr.responseType = 'blob';
+        xhr.onload = () => {
+            // response会根据responseType指定的类型自动处理结果
+            const reader = new FileReader();
+            reader.readAsArrayBuffer(xhr.response);
+            reader.onloadend = () => this.props.vm.loadProject(reader.result).then(() => {
+                analytics.event({
+                    category: 'project',
+                    action: 'Import Project File',
+                    nonInteraction: true
+                });
+                // this.props.onLoadingFinished(this.props.loadingState);
+            });
+        };
+        xhr.send(obj);
     }
     componentDidUpdate (prevProps) {
         if (this.props.isLoadingUpload && !prevProps.isLoadingUpload && this.fileToUpload && this.reader) {
             this.reader.readAsArrayBuffer(this.fileToUpload);
         }
     }
+    
     componentWillUnmount () {
         this.reader = null;
         this.resetFileInput();
@@ -92,6 +121,7 @@ class SBFileUploader extends React.Component {
     }
     // called when user has finished selecting a file to upload
     handleChange (e) {
+        console.log(e)
         const {
             intl,
             isShowingWithoutId,
@@ -103,16 +133,22 @@ class SBFileUploader extends React.Component {
         const thisFileInput = e.target;
         if (thisFileInput.files) { // Don't attempt to load if no file was selected
             this.fileToUpload = thisFileInput.files[0];
-
+            console.log(this.fileToUpload)
             // If user owns the project, or user has changed the project,
             // we must confirm with the user that they really intend to replace it.
             // (If they don't own the project and haven't changed it, no need to confirm.)
             let uploadAllowed = true;
+            console.log('userOwnsProject', userOwnsProject)
+            console.log('projectChanged', projectChanged)
+            console.log('isShowingWithoutId', isShowingWithoutId)
+
             if (userOwnsProject || (projectChanged && isShowingWithoutId)) {
                 uploadAllowed = confirm( // eslint-disable-line no-alert
                     intl.formatMessage(sharedMessages.replaceProjectWarning)
                 );
             }
+            console.log('uploadAllowed', uploadAllowed)
+            console.log('loadingState', loadingState)
             if (uploadAllowed) {
                 this.props.requestProjectUpload(loadingState);
             } else {
@@ -122,6 +158,7 @@ class SBFileUploader extends React.Component {
     }
     // called when file upload raw data is available in the reader
     onload () {
+        console.log('onload')
         if (this.reader) {
             this.props.onLoadingStarted();
             const filename = this.fileToUpload && this.fileToUpload.name;

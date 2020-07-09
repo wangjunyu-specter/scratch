@@ -58,7 +58,8 @@ class GUI extends React.Component {
             commentData: '',
             filepath: false,
             ispl: 0, // 1 是评论 2 上课 3 答题 4 看答案
-            loading: false
+            loading: false, // 用于打开服务器代码的加载
+            loading2: false // 用于提交代码等的加载
         };
         bindAll(this, [
             'setLogin',
@@ -67,7 +68,9 @@ class GUI extends React.Component {
             'setFilepath',
             'setIspl',
             'getFileForPath',
-            'getFilePath'
+            'getFilePath',
+            'setLoading',
+            'setLoading2'
         ]);
         this.domini = 'http://47.105.231.23:8080';
     }
@@ -129,6 +132,7 @@ class GUI extends React.Component {
         if (this.search.filepath) {
             this.setFilepath();
             this.getFileForPath(this.search.filepath);
+            
         } else if (this.search.ispl && this.search.courseId) {
             let link = '';
             const obj = {
@@ -202,6 +206,11 @@ class GUI extends React.Component {
             loading: bool
         });
     }
+    setLoading2 (bool) {
+        this.setState({
+            loading2: bool
+        });
+    }
     /**
      * @Author: wjy-mac
      * @description: 获取编程文件地址
@@ -249,6 +258,9 @@ class GUI extends React.Component {
             console.log(filePath)
             // eslint-disable-next-line no-unused-expressions
             filePath && this.getFileForPath(filePath);
+            // window.onload = function() {
+            //     alert(1)
+            // }
         };
         if (type === 'POST') {
             xhr.send(obj2);
@@ -258,35 +270,41 @@ class GUI extends React.Component {
     }
     // eslint-disable-next-line react/sort-comp
     getFileForPath (path) { // 获取编程文件
-        console.log(path)
         if (!path || typeof path !== 'string') {
             return;
         }
         this.setLoading(true);
-        const obj = new FormData();
-        obj.append('path', path);
-        const xhr = new XMLHttpRequest();
-        xhr.open('POST', `${this.domini}/api/common/download`, true);
-        // xhr.setRequestHeader('Content-Type', 'multipart/form-data;');
-        xhr.setRequestHeader('token', this.token);
-        xhr.setRequestHeader('loginName', this.search.loginName);
-        xhr.setRequestHeader('dqUserId', this.search.dqUserId);
-        // responseType要放到send前面
-        xhr.responseType = 'blob';
-        xhr.onload = () => {
-            // response会根据responseType指定的类型自动处理结果
-            const reader = new FileReader();
-            reader.readAsArrayBuffer(xhr.response);
-            reader.onloadend = () => this.props.vm.loadProject(reader.result).then(() => {
-                GoogleAnalytics.event({
-                    category: 'project',
-                    action: 'Import Project File',
-                    nonInteraction: true
+        if ((this.props.fetchingProject || this.props.isLoading || this.props.loadingStateVisible)) {
+            this.getFileForPath(path)
+            return;
+        }
+        window.onload = () => {
+            const obj = new FormData();
+            obj.append('path', path);
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', `${this.domini}/api/common/download`, true);
+            // xhr.setRequestHeader('Content-Type', 'multipart/form-data;');
+            xhr.setRequestHeader('token', this.token);
+            xhr.setRequestHeader('loginName', this.search.loginName);
+            xhr.setRequestHeader('dqUserId', this.search.dqUserId);
+            // responseType要放到send前面
+            xhr.responseType = 'blob';
+            xhr.onload = () => {
+                // response会根据responseType指定的类型自动处理结果
+                const reader = new FileReader();
+                reader.readAsArrayBuffer(xhr.response);
+                reader.onloadend = () => this.props.vm.loadProject(reader.result).then(() => {
+                    GoogleAnalytics.event({
+                        category: 'project',
+                        action: 'Import Project File',
+                        nonInteraction: true
+                    });
+                    this.setLoading(false);
                 });
-                this.setLoading(false);
-            });
+            };
+            xhr.send(obj);
         };
-        xhr.send(obj);
+        
     }
     submitCommentForm () { // 提交评语
         const obj = {
@@ -374,6 +392,7 @@ class GUI extends React.Component {
         return (
             <GUIComponent
                 loading={fetchingProject || isLoading || loadingStateVisible || this.state.loading}
+                loading2={this.state.loading2}
                 loginState={this.state.loginState}
                 username2={this.state.username2}
                 courseId={this.state.courseId}
@@ -382,6 +401,7 @@ class GUI extends React.Component {
                 submitCommentForm={this.submitCommentForm}
                 changeComentForm={changeComentForm}
                 commentFormData={commentFormData}
+                setLoading={this.setLoading2}
                 ispl={this.state.ispl}
                 {...componentProps}
             >

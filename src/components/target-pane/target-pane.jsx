@@ -54,14 +54,14 @@ const TargetPane = ({
         {...componentProps}
     >
         {
-            ispl === 1 ? (
-                <div>
-                    <MyRoundButton
-                        buttonName={'评语'}
-                        onClick={showCommentFormModal}
-                    />
-                </div>
-            ) : null
+            // ispl === 1 ? (
+            //     <div>
+            //         <MyRoundButton
+            //             buttonName={'评语'}
+            //             onClick={showCommentFormModal}
+            //         />
+            //     </div>
+            // ) : null
         }
         
         <SpriteSelectorComponent
@@ -82,7 +82,7 @@ const TargetPane = ({
             onDeleteSprite={onDeleteSprite}
             onDrop={onDrop}
             onDuplicateSprite={onDuplicateSprite}
-            // onExportSprite={onExportSprite} 禁止右键导出
+            // onExportSprite={onExportSprite} //禁止右键导出
             onFileUploadClick={onFileUploadClick}
             onNewSpriteClick={onNewSpriteClick}
             onPaintSpriteClick={onPaintSpriteClick}

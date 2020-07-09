@@ -49,7 +49,7 @@ const MonitorList = props => (
 
 MonitorList.propTypes = {
     draggable: PropTypes.bool.isRequired,
-    // monitors: PropTypes.instanceOf(OrderedMap), TODO: 报错，不晓得为撒，先隐藏
+    monitors: PropTypes.instanceOf(OrderedMap),
     onMonitorChange: PropTypes.func.isRequired,
     stageSize: PropTypes.shape({
         width: PropTypes.number,

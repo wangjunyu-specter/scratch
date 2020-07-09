@@ -16,6 +16,7 @@ import TargetPane from '../../containers/target-pane.jsx';
 import SoundTab from '../../containers/sound-tab.jsx';
 import StageWrapper from '../../containers/stage-wrapper.jsx';
 import Loader from '../loader/loader.jsx';
+import Myloader from '../myloader/loader.jsx';
 import TaskModal from '../task-modal/task-modal.jsx';
 import CommentFormModal from '../comment-form/comment-form.jsx';
 import Box from '../box/box.jsx';
@@ -133,6 +134,8 @@ const GUIComponent = props => {
         changeComentForm,
         commentFormData,
         ispl,
+        setLoading,
+        loading2,
         ...componentProps
     } = omit(props, 'dispatch');
     if (children) {
@@ -202,6 +205,9 @@ const GUIComponent = props => {
                 {loading ? (
                     <Loader />
                 ) : null}
+                {loading2 ? (
+                    <Myloader />
+                ) : null}
                 {isCreating ? (
                     <Loader messageId="gui.loader.creating" />
                 ) : null}
@@ -263,6 +269,7 @@ const GUIComponent = props => {
                     onSeeCommunity={onSeeCommunity}
                     onShare={onShare}
                     onToggleLoginOpen={onToggleLoginOpen}
+                    onsetLoading={setLoading}
                     loginState={loginState}
                     username2={username2}
                     courseId={courseId}
@@ -426,6 +433,7 @@ GUIComponent.propTypes = {
     isRtl: PropTypes.bool,
     isShared: PropTypes.bool,
     loading: PropTypes.bool,
+    loading2: PropTypes.bool,
     logo: PropTypes.string,
     onActivateCostumesTab: PropTypes.func,
     onActivateSoundsTab: PropTypes.func,
@@ -463,7 +471,8 @@ GUIComponent.propTypes = {
     submitCommentForm: PropTypes.func,
     changeComentForm: PropTypes.func,
     commentFormData: PropTypes.string,
-    ispl: PropTypes.number
+    ispl: PropTypes.number,
+    setLoading: PropTypes.func
 };
 GUIComponent.defaultProps = {
     backpackHost: null,
@@ -482,6 +491,7 @@ GUIComponent.defaultProps = {
     isCreating: false,
     isShared: false,
     loading: false,
+    loading2: false,
     showComingSoon: false,
     stageSizeMode: STAGE_SIZE_MODES.large,
     showTaskModal: true,
@@ -489,6 +499,7 @@ GUIComponent.defaultProps = {
     taskSwiperIndex: 0,
     setIndex: () => {},
     setIndex2: () => {},
+    setLoading: () => {},
     ispl: 0
 };
 
