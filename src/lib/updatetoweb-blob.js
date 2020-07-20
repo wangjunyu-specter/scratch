@@ -2,7 +2,7 @@
  * @Author: wjy-mac
  * @Date: 2020-06-22 22:17:33
  * @LastEditors: wjy-mac
- * @LastEditTime: 2020-06-28 23:29:39
+ * @LastEditTime: 2020-07-21 00:30:55
  * @Description: 保存文件到服务器
  */ 
 
@@ -28,7 +28,13 @@ export default (filename, blob) => {
         const file = new File([blob], filename, {type: blob.type, lastModified: Date.now()});
         const formData = new FormData();
         formData.append('file', file);
-        fetch(`${domin}/api/common/upload`, {
+        let link = `${domin}/api/common/upload`;
+        const ispl = search.ispl;
+        if (+ispl === 7 || +ispl === 4) {
+            formData.append('path', search.filepath);
+            link = `${domin}/api/common/replaceFile`;
+        }
+        fetch(link, {
             method: 'POST',
             body: formData,
             headers: new Headers({
@@ -37,17 +43,22 @@ export default (filename, blob) => {
                 dqUserId: search.dqUserId
             })
         }).then(res => res.json()).then(res =>{
-            const resFile = res.data;
-            const homeWorks = JSON.stringify({
-                courseId: search.courseId,
-                topicId: search.topicId || 0,
-                cover: '',
-                answerContent: resFile.fileName,
-                answerTime: Date.now(),
-                studentId: search.userId,
-                fileId: search.fileId
-            });
-            setWork(`[${homeWorks}]`, search).then(() => resolve()).catch(() => reject());
+            if (+ispl === 7 || +ispl === 4) {
+                resolve();
+            } else {
+                const resFile = res.data;
+                const homeWorks = JSON.stringify({
+                    courseId: search.courseId,
+                    topicId: search.topicId || 0,
+                    cover: '',
+                    answerContent: resFile.fileName,
+                    answerTime: Date.now(),
+                    studentId: search.userId,
+                    fileId: search.fileId
+                });
+                setWork(`[${homeWorks}]`, search).then(() => resolve()).catch(() => reject());
+            }
+            
         }).catch(err => {
             console.log(err)
             alert('上传文件失败!');

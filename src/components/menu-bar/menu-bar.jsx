@@ -548,7 +548,7 @@ class MenuBar extends React.Component {
                         ) : null
                     }
                     {
-                        this.props.ispl === 2 || this.props.ispl === 3 ? (
+                        this.props.ispl === 2 || this.props.ispl === 3 || this.props.ispl === 4 || this.props.ispl === 7 ? (
                             <div>
                                 <MenuItem
                                     isRtl={this.props.isRtl}
@@ -577,6 +577,30 @@ class MenuBar extends React.Component {
                                             defaultMessage="上传作业到服务器"
                                             description="Menu bar item for downloading a project to your computer" // eslint-disable-line max-len
                                             id="gui.menuBar.updatetoweb"
+                                        />
+                                        </MenuItem>
+                                    )}</SB3UpdateToWeb>
+                            </div>
+                        ) : null
+                    }
+                    {
+                        this.props.ispl === 4 || this.props.ispl === 7 ? (
+                            <div>
+                                <SB3UpdateToWeb
+                                    setShowTips={this.setShowTips}
+                                    closeShowTips={this.xloseShowTips}
+                                >{(className, downloadProjectCallback, timefn) => (
+                                    <MenuItem
+                                        className={className}
+                                        onClick={this.getSaveToComputerHandler(downloadProjectCallback)}
+                                    >
+                                        {/* {
+                                            timefn()
+                                        } */}
+                                        <FormattedMessage
+                                            defaultMessage="保存修改"
+                                            description="Menu bar item for downloading a project to your computer" // eslint-disable-line max-len
+                                            id="gui.menuBar.updatetoweb2"
                                         />
                                         </MenuItem>
                                     )}</SB3UpdateToWeb>
