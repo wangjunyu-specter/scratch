@@ -56,6 +56,8 @@ const TaskModal = props => {
                                         height="300"
                                         src={`http://47.105.231.23:8080/profile${item.vedio}`}
                                         controls="controls"
+                                        controlslist="nodownload"
+                                        webkit-playsinline="true"
                                         // eslint-disable-next-line react/jsx-no-literals
                                     >
                                         您的浏览器不支持 video 标签。

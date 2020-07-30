@@ -2,7 +2,7 @@
  * @Author: wjy-mac
  * @Date: 2020-06-22 22:17:33
  * @LastEditors: wjy-mac
- * @LastEditTime: 2020-07-21 00:30:55
+ * @LastEditTime: 2020-07-28 20:01:42
  * @Description: 保存文件到服务器
  */ 
 
@@ -88,5 +88,4 @@ const setWork = (homeWorks, search) => {
             reject();
         });
     });
-    
 }
